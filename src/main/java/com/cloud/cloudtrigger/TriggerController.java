@@ -3,6 +3,7 @@ package com.cloud.cloudtrigger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,16 +18,17 @@ import java.net.http.HttpResponse;
 @RestController
 public class TriggerController {
 
-    private static final String LOCAL_AGENT_URL = "https://155c-196-132-12-149.ngrok-free.app/run-job"; // for now
+    @Value("${local.agent.url}")
+    private String localAgentUrl;
 
     @PostMapping("/trigger-job")
     public ResponseEntity<String> triggerJob(@RequestBody JobRequest job) {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(job); // ✅ convert object to JSON
+            String json = mapper.writeValueAsString(job); 
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(LOCAL_AGENT_URL))
+                    .uri(URI.create(localAgentUrl))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
