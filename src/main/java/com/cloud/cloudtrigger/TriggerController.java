@@ -20,7 +20,7 @@ public class TriggerController {
     private static final String LOCAL_AGENT_URL = "https://155c-196-132-12-149.ngrok-free.app/run-job"; // for now
 
     @PostMapping("/trigger-job")
-    public ResponseEntity<?> triggerJob(@RequestBody JobRequest job) {
+    public ResponseEntity<?> triggerJob(@RequestBody String job) {
         try {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
