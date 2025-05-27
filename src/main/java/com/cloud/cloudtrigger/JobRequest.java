@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class JobRequest {
-    private String jarUrl;
-    private String excelUrl;
-    private String resultUploadUrl;
+    private String zipUrl;
+    private String jarNameToRun;
 }
