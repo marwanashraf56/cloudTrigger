@@ -20,19 +20,24 @@ public class TriggerController {
     private static final String LOCAL_AGENT_URL = "https://155c-196-132-12-149.ngrok-free.app/run-job"; // for now
 
     @PostMapping("/trigger-job")
-    public ResponseEntity<?> triggerJob(@RequestBody String job) {
+    public ResponseEntity<String> triggerJob(@RequestBody JobRequest job) {
         try {
-            HttpClient client = HttpClient.newHttpClient();
+            ObjectMapper mapper = new ObjectMapper();
+            String json = mapper.writeValueAsString(job); // ✅ convert object to JSON
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(LOCAL_AGENT_URL))
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(new ObjectMapper().writeValueAsString(job)))
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
+            HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return ResponseEntity.ok(response.body());
+
+            return ResponseEntity.status(response.statusCode()).body(response.body());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("❌ Error: " + e.getMessage());
         }
     }
 }
