@@ -17,7 +17,7 @@ import java.net.http.HttpResponse;
 @RestController
 public class TriggerController {
 
-    private static final String LOCAL_AGENT_URL = "https://your-ngrok-url.ngrok.io/run-job"; // for now
+    private static final String LOCAL_AGENT_URL = "https://155c-196-132-12-149.ngrok-free.app"; // for now
 
     @PostMapping("/trigger-job")
     public ResponseEntity<?> triggerJob(@RequestBody JobRequest job) {
